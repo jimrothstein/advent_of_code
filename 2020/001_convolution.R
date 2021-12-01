@@ -5,7 +5,7 @@
 
 {
 start  <- Sys.time()
-options(error = browser)
+#options(error = browser)
 options(error = NULL)
 L  <- 10
 x   <- 1:10
@@ -14,26 +14,39 @@ counter = 1
 v  <- vector(mode = "integer", length = L*L)
 
 for (i in 1:L) { 
-    if (i+1 < L) {
-
-        for (j in i+1:L){
-            if (j == 9) browser()
-            v[[counter]]  <- x[[i]] + x[[j]]
-            counter  <<-  counter + 1
+        for (j in i:L){
+#            if (counter == 45) {browser()}
+            if( i < j){
+                v[[counter]]  <- x[[i]] + x[[j]]
+                if (v[[counter]] == 13) print("you win prize")
+                counter  <<-  counter + 1
+            }
         }
-        rm(j)
-    }
 }
 
 print(Sys.time() - start)
+v
 
 }
 
 
 
-for (i in 1:5) {
-    for (j in seq(i+1, 5)) {
-        if (i +1 < 5)
-        cat (i, ", ", j , "\n")
-    }
+
+#### sapply version
+{
+
+start  <- Sys.time()
+#options(error = browser)
+options(error = NULL)
+L  <- 10
+x   <- 1:10
+counter = 1
+## initialize to NA
+v  <- matrix(ncol=L, nrow=L)
+sapply(1:L, function(i) {
+           if (i < j)   # removes diagonal (lower triangle already skipped)
+           sapply(i:L, function(j) { v[[i, j]] <<- x[[i]] + x[[j]] })
+        })
+print(Sys.time() - start)
+v
 }
