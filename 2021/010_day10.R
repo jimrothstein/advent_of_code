@@ -46,7 +46,7 @@ https://adventofcode.com/2021/day/10
     }
 
 ## When found to be pairs, mark as TRUE
-    mark_paired  <- function(left, right, line=NULL) {
+   set_paired  <- function(left, right, line=NULL) {
         paired[[left]]  <- TRUE
         paired[[right]]  <- TRUE
     }
@@ -68,13 +68,31 @@ https://adventofcode.com/2021/day/10
 ## convert all chars to ints (easier on eyes)
     line  <- vapply(line, f, 3)  # integer, example 3
     
+## is_open_bracket(pos)
+    is_open_bracket  <- function(pos) {
+        if (line[[pos]] < 0) return(TRUE)
+        FALSE
+    }
 
+    brute  <- function(pos){
+        print(paste0("(", pos,",",
+                     pos +1, ")"))
+    }
+    brute(1)
+    x  <- sapply(1:length(line), brute)
 
 ## first closing
 find_right  <- function(pos = 1, line=NULL){
     if (line[[pos]] > 0) return(pos)
     if (pos == length(line)) return("NOT FOUND")
     return(find_right(pos=pos+1, line))
+}
+
+find_candidate  <- function(pos) {
+    want  <- 
+    if (is_open_bracket(line[[pos]]) )
+    #   find first closed bracket
+    #   skip positions already paired
 }
 
 {
@@ -91,11 +109,12 @@ find_left  <- function(pos = NULL, line=NULL){
     return(candidate)
 }
 
-options(error = browser)
+#   options(error = browser)
+    options(error = NULL)
 check_candidate  <- function(candidate = NULL, pos=NULL ){
 ## candidate a match with pos?
 if ( is_pair(candidate, pos) ) {
-    mark_paired(candidate, pos)
+    set_paired(candidate, pos)
     print("find next right")
 }
 }
@@ -108,7 +127,7 @@ if (
 
 ## should it be paired?
     if (is_pair(candidate -1, candidate, line)) {
-        mark_paired(candidate-1, candidate, line)
+        set_paired(candidate-1, candidate, line)
         print("must move to right")
     }
 }
