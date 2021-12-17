@@ -34,7 +34,7 @@ TAGS:  regression
 # -------------------------
 
 #### Setup
-{
+setup <- function() {
     library(tinytest)
     line3  <- "{([(<{}[<>[]}>{[]{[(<()>"
     line  <- line3
@@ -63,15 +63,60 @@ TAGS:  regression
 ## convert all chars to ints (easier on eyes)
     line  <- vapply(line, f, 3)  # integer, example 3
 }
+line  <- setup()
+L  <- length(line)
+line
+
+
+{
+    ## brute
+    brute  <- function(pos){
+        if (pos == L) return()
+        right  <- pos + 1 # default
+        right  <- find_candidate(pos, pos+1)
+        if (right == 0) {
+            print(line) 
+            return("done")
+        }
+        if (is_pair(pos, right)) {
+            set_paired(pos, right)
+}
+
+    }
+    sapply(1:24, brute)
+    line   
+    options(error = NULL)
+
+}
 
 #-------------------
 ## helper functions
 #-------------------
 {
 
+#   assume - we start with open bracket = pos
+#   cand - refers to first possible closed bracket (ie add 1 to open bracket
+#   position, before calling) 
+#   cand  - if closed bracket, return as candidate.
+#   cand  - if zero, skip, ie recurse with pos + 1 
+#
+find_candidate  <- function(pos, cand) {
+    # pos isn't going to change; only helpful
+    if (cand > L) {
+        cat("****no more candidates, end of line", "\n")
+        return(0)
+    }
+    if (line[[cand]] == 0) {
+        cat(cand, "\n")
+ #       if (cand == 24 ) browser()
+        cand  <- find_candidate(pos, cand +1)
+    } else {
+        return(cand)
+    }
+}
 ## Check, if a position already paired?
     is_pair  <- function(left=1, right=1) {
-        brute(left, right)
+        #brute(left, right)
         if (line[[left]] + line[[right]] == 0) return(TRUE)
         FALSE
     }
@@ -97,25 +142,7 @@ TAGS:  regression
     }
 
 
-#   assume - we start with open bracket = pos
-#   cand - refers to first possible closed bracket (ie add 1 to open bracket
-#   position, before calling) 
-#   cand  - if closed bracket, return as candidate.
-#   cand  - if zero, skip, ie recurse with pos + 1 
-#
-find_candidate  <- function(pos, cand) {
-    # pos isn't going to change; only helpful
-    if (cand > L) {
-        return("****no more candidates, end of line")
-    }
-    if (line[[cand]] == 0) {
-        cand  <- find_candidate(cand +1)
-    } else {
-        brute(pos, cand)
-        return(cand)
-    }
 }
-
 {## test find_candidate
     line
     pos = 1 
