@@ -29,60 +29,74 @@ TAGS:  regression
 
 #### Setup
 {
+  setup  <- function(){
+
     library(tinytest)
 
-## input data, into vector    
-v = "123
-456
-789"
-v
-
-v  <- "199
-200
-208
-210
-200
-207
-240
-269
-260
-263"
-v
-
-## see below to read real data
-## ------------------------------
-strsplit(v, split="\n")
-data  <- unlist(strsplit(v, split="\n"))
-typeof(data)
-data  <- as.integer(data)
-data
-str(data)
+    ## practice:  crude way to read into vector, v is single character string
+    v = "123
+    456
+    789"
+    v
 
 
+    v  <- "199
+    200
+    208
+    210
+    200
+    207
+    240
+    269
+    260
+    263"
+    v
 
-## length
-L  <- length(data)
-L
+    ## REAL DATA:  see below to read real data
+    ## ------------------------------
+}
+
+####  Break character string and convert to integer vector
+
+    prep  <- function(v = NULL) {
+        strsplit(v, split="\n")
+        data  <- unlist(strsplit(v, split="\n"))
+    }
+    data  <- prep(v)
+    head(data)
+
+####  Check `data` is what I think it is:
+    {
+        typeof(data)
+        # [1] "character"
+        
+        data  <- as.integer(data)
+        str(data)
+            
+        L  <- length(data)
+        L
+     }
 
 
-x1 = data 
-x2 = c(data[-1], data[L])
-x2
+####   Calc
 
-
-diff = x2 - x1
-diff
-is.integer(diff)
-diff
-
-f  <- function(e) {
-    if (e > 0) {
-      return(as.integer(1))
-    } else { 
-    return(as.integer(0))
+    ans  <- function(data) {
+        x1  <- data[-L]
+        x2  <- data[-1]
+        diff  <- x2 - x1 
     }
 
-}
+    diff  <- ans(data)
+
+#### Helper, 1 if positive
+    f  <- function(e) {
+        if (e > 0) {
+        return(as.integer(1))
+        } else { 
+        return(as.integer(0))
+    }
+
+   }
 sum(sapply(diff, f))  # 1713, which is correct
 
 {
